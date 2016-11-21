@@ -12,9 +12,13 @@
 		function test()
 		{
 			$data = '';
-			$this->public_bootstrap($data);
+			$this->admin($data);
 		}
 
+		function admin($data)
+		{
+			$this->load->view('admin', $data);
+		}
 		function public_bootstrap($data)
 		{
 			$this->load->view('public_bootstrap', $data);
@@ -25,10 +29,6 @@
 			$this->load->view('public_jqm', $data);
 		}
 
-		function admin($data)
-		{
-			$this->load->view('admin', $data);
-		}
 
 
 	}
