@@ -12,7 +12,7 @@
 		function test()
 		{
 			$data = '';
-			$this->public_jqm($data);
+			$this->admin($data);
 		}
 
 		function admin($data)
