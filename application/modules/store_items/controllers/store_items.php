@@ -82,6 +82,8 @@ class Store_items extends MX_Controller
 	{
 		$this->load->module('site_security');
 		$this->site_security->_make_sure_is_admin();
+
+		$data['query'] = $this->get('item_title');
 		
 		$data['view_module'] = "store_items";
 		$data['view_file'] = "manage";
