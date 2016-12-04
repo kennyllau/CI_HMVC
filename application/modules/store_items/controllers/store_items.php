@@ -10,6 +10,81 @@ class Store_items extends MX_Controller
         $this->form_validation->CI =& $this;
 	}
 
+	function do_upload($update_id)
+	{
+		if (!is_numeric($update_id))
+		{
+			redirect('site_security/not_allowed');
+		}
+
+		$this->load->library('session');
+		$this->load->module('site_security');
+		$this->site_security->_make_sure_is_admin();
+
+		$submit = $this->input->post('submit', TRUE);
+
+		if ($submit == "Cancel")
+		{
+			redirect('store_items/create/'.$update_id);
+		}
+
+		// taken from CI documentation
+		$config['upload_path']          = './big_pics/';
+        $config['allowed_types']        = 'gif|jpg|png';
+        $config['max_size']             = 100;
+        $config['max_width']            = 1024;
+        $config['max_height']           = 768;
+
+        $this->load->library('upload', $config);
+
+        if ( ! $this->upload->do_upload('userfile'))
+        {
+            $data['error'] = array('error' => $this->upload->display_errors("<p style='color: red;'>", "</p>"));
+            // foreach($error as $key => $value)
+            // {
+            // 	echo $value."<br>";
+            // }
+	        $data['headline'] = "Upload Image";
+			$data['update_id'] = $update_id;
+			$data['flash'] = $this->session->flashdata('item');
+			$data['view_file'] = "upload_image";
+			$this->load->module('templates');
+			$this->templates->admin($data);
+        }
+        else
+        {
+            $data = array('upload_data' => $this->upload->data());
+            $data['headline'] = "Upload Success";
+			$data['update_id'] = $update_id;
+			$data['flash'] = $this->session->flashdata('item');
+			$data['view_file'] = "upload_success";
+			$this->load->module('templates');
+			$this->templates->admin($data);
+        }
+	}
+
+	function upload_image($update_id)
+	{
+		// goes to the update image view page.
+		if (!is_numeric($update_id))
+		{
+			redirect('site_security/not_allowed');
+		}
+
+		$this->load->library('session');
+		$this->load->module('site_security');
+		$this->site_security->_make_sure_is_admin();
+
+		$data['headline'] = "Upload Image";
+		$data['update_id'] = $update_id;
+		$data['flash'] = $this->session->flashdata('item');
+
+		$data['view_file'] = "upload_image";
+		$this->load->module('templates');
+		// load heirarchy module and pass $data to it
+		$this->templates->admin($data);
+	}
+
 	function create()
 	{
 		$this->load->library('session');
@@ -25,6 +100,7 @@ class Store_items extends MX_Controller
 			$this->form_validation->set_rules('item_title', 'Item Title', 'required|max_length[240]|callback_item_check');
 			$this->form_validation->set_rules('item_price', 'Item Price', 'required|numeric');
 			$this->form_validation->set_rules('was_price', 'Was Price', 'numeric');
+			$this->form_validation->set_rules('status', 'Status', 'required|numeric');
 			$this->form_validation->set_rules('item_description', 'Item Description', 'required');
 
 			if ($this->form_validation->run() == TRUE)
@@ -72,9 +148,10 @@ class Store_items extends MX_Controller
 		$data['update_id'] = $update_id;
 		$data['flash'] = $this->session->flashdata('item');
 
-		$data['view_module'] = "store_items";
+		// $data['view_module'] = "store_items";
 		$data['view_file'] = "create";
 		$this->load->module('templates');
+		// load heirarchy module and pass $data to it
 		$this->templates->admin($data);
 	}
 
@@ -83,9 +160,8 @@ class Store_items extends MX_Controller
 		$this->load->module('site_security');
 		$this->site_security->_make_sure_is_admin();
 
-		$data['query'] = $this->get('item_title');
-		
-		$data['view_module'] = "store_items";
+		$data['query'] = $this->get('item_title');		
+		// $data['view_module'] = "store_items";
 		$data['view_file'] = "manage";
 		$this->load->module('templates');
 		$this->templates->admin($data);
@@ -97,6 +173,7 @@ class Store_items extends MX_Controller
 		$data['item_price'] = $this->input->post('item_price', true);
 		$data['was_price'] = $this->input->post('was_price', true);
 		$data['item_description'] = $this->input->post('item_description', true);
+		$data['status'] = $this->input->post('status', true);
 
 		return $data;
 	}
@@ -113,6 +190,7 @@ class Store_items extends MX_Controller
 			$data['big_pic'] = $row->big_pic;
 			$data['small_pic'] = $row->small_pic;
 			$data['was_price'] = $row->was_price;
+			$data['status'] = $row->status;
 		}
 
 		if(!isset($data))

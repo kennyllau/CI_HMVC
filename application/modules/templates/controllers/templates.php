@@ -12,15 +12,23 @@
 		function test()
 		{
 			$data = '';
-			$this->admin($data);
+			$this->public_jqm($data);
 		}
 
 		function admin($data)
 		{
+			if (!isset($data['view_module']))
+			{
+				$data['view_module'] = $this->uri->segment(1);
+			}
 			$this->load->view('admin', $data);
 		}
 		function public_bootstrap($data)
 		{
+			if (!isset($data['view_module']))
+			{
+				$data['view_module'] = $this->uri->segment(1);
+			}
 			$this->load->view('public_bootstrap', $data);
 		}
 

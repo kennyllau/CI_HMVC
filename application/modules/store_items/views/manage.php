@@ -1,8 +1,8 @@
 <h1>Manage items</h1>
 
-	<?php 
-		$create_item_url = base_url()."store_items/create";
-	?>
+<?php 
+	$create_item_url = base_url()."store_items/create";
+?>
 
 <p style="margin-top: 50px;">
 	<a href="<?= $create_item_url ?>"><button type="button" class="btn btn-primary">Add New Item</button></a>
@@ -30,16 +30,29 @@
 							  </tr>
 						  </thead>   
 						  <tbody>
-						  <?php 
-						  foreach($query->result() as $row) { 
-						  	$edit_item_url = base_url()."store_items/create/".$row->id;
-						  	?>
+<?php 
+	foreach($query->result() as $row) 
+	{ 
+		$edit_item_url = base_url()."store_items/create/".$row->id;
+		// edit_item_url is link to update item button in inventory
+
+		$status = $row->status;
+
+		if ($status == 1)
+		{
+			$status_label = "success";
+			$status_description = "Active";
+		} else {
+			$status_label = "default";
+			$status_description = "inActive";
+		}
+?>
 							<tr>
 								<td><?= $row->item_title ?></td>
 								<td class="center"><?= $row->item_price ?></td>
 								<td class="center"><?= $row->item_price ?></td>
 								<td class="center">
-									<span class="label label-success">Active</span>
+									<span class="label label-<?= $status_label?>"><?= $status_description ?></span>
 								</td>
 								<td class="center">
 									<a class="btn btn-success" href="#">
@@ -53,7 +66,7 @@
 									</a> -->
 								</td>
 							</tr>
-							<?php } ?>
+<?php } ?>
 						  </tbody>
 					  </table>            
 					</div>
