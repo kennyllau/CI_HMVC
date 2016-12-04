@@ -1,5 +1,5 @@
 ###################
-What is CodeIgniter
+What is NYAN NYAN
 ###################
 
 CodeIgniter is an Application Development Framework - a toolkit - for people
@@ -11,7 +11,7 @@ you creatively focus on your project by minimizing the amount of code needed
 for a given task.
 
 *******************
-Release Information
+Release The Crackling!
 *******************
 
 This repo contains in-development code for future releases. To download the
