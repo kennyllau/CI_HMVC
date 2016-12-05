@@ -10,6 +10,21 @@ class Store_items extends MX_Controller
         $this->form_validation->CI =& $this;
 	}
 
+	function _generate_thumbnail($file_name)
+	// _ makes the function private
+	{
+		$config['image_library'] = 'gd2';
+		$config['source_image'] = './big_pics/'.$file_name;
+		$config['new_image'] = './small_pics/'.$file_name;
+		$config['maintain_ratio'] = TRUE;
+		$config['width']         = 200;
+		$config['height']       = 200;
+
+		$this->load->library('image_lib', $config);
+
+		$this->image_lib->resize();
+	}
+
 	function do_upload($update_id)
 	{
 		if (!is_numeric($update_id))
@@ -52,8 +67,18 @@ class Store_items extends MX_Controller
 			$this->templates->admin($data);
         }
         else
+        	// upload was successful
         {
             $data = array('upload_data' => $this->upload->data());
+
+            $upload_data = $data['upload_data'];
+            $file_name = $upload_data['file_name'];
+            $this->_generate_thumbnail($file_name);
+
+            $update_data['big_pic'] = $file_name;
+            $update_data['small_pic'] = $file_name;
+            $this->_update($update_id, $update_data); 
+
             $data['headline'] = "Upload Success";
 			$data['update_id'] = $update_id;
 			$data['flash'] = $this->session->flashdata('item');
