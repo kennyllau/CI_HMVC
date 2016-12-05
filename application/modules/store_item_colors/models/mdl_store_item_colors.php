@@ -1,14 +1,17 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
-class Mdl_store_items extends CI_Model {
+class Mdl_store_item_colors extends CI_Model 
+{
 
 	function __construct() 
 	{
+
 		parent::__construct();
+
 	}
 
 	function get_table() 
 	{
-		$table = "store_items";
+		$table = "store_item_colors";
 		return $table;
 	}
 
@@ -37,12 +40,10 @@ class Mdl_store_items extends CI_Model {
 		return $query;
 	}
 
-	// for update color page
 	function get_where_custom($col, $value) 
 	{
 		$table = $this->get_table();
 		$this->db->where($col, $value);
-		$this->db->order_by('color');
 		$query=$this->db->get($table);
 		return $query;
 	}
