@@ -4,7 +4,7 @@
 	
 	<!-- start: Meta -->
 	<meta charset="utf-8">
-	<title>Bootstrap Metro Dashboard by Dennis Ji for ARM demo</title>
+	<title>Bootstrap Metro Dashboard by NYAN NYAN</title>
 	<meta name="description" content="Bootstrap Metro Dashboard">
 	<meta name="author" content="Dennis Ji">
 	<meta name="keyword" content="Metro, Metro UI, Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
@@ -223,7 +223,7 @@
 										<span class="avatar"><img src="<?php echo base_url(); ?>adminfiles/img/avatar.jpg" alt="Avatar"></span>
 										<span class="header">
 											<span class="from">
-										    	Dennis Ji
+										    	Kenny Lau
 										     </span>
 											<span class="time">
 										    	6 min
@@ -239,7 +239,7 @@
 										<span class="avatar"><img src="<?php echo base_url(); ?>adminfiles/img/avatar.jpg" alt="Avatar"></span>
 										<span class="header">
 											<span class="from">
-										    	Dennis Ji
+										    	Kenny Lau
 										     </span>
 											<span class="time">
 										    	56 min
@@ -255,7 +255,7 @@
 										<span class="avatar"><img src="<?php echo base_url(); ?>adminfiles/img/avatar.jpg" alt="Avatar"></span>
 										<span class="header">
 											<span class="from">
-										    	Dennis Ji
+										    	Kenny Lau
 										     </span>
 											<span class="time">
 										    	3 hours
@@ -271,7 +271,7 @@
 										<span class="avatar"><img src="<?php echo base_url(); ?>adminfiles/img/avatar.jpg" alt="Avatar"></span>
 										<span class="header">
 											<span class="from">
-										    	Dennis Ji
+										    	Kenny Lau
 										     </span>
 											<span class="time">
 										    	yesterday
@@ -287,7 +287,7 @@
 										<span class="avatar"><img src="<?php echo base_url(); ?>adminfiles/img/avatar.jpg" alt="Avatar"></span>
 										<span class="header">
 											<span class="from">
-										    	Dennis Ji
+										    	Kenny Lau
 										     </span>
 											<span class="time">
 										    	Jul 25, 2012
@@ -307,7 +307,7 @@
 						<!-- start: User Dropdown -->
 						<li class="dropdown">
 							<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-								<i class="halflings-icon white user"></i> Dennis Ji
+								<i class="halflings-icon white user"></i> Kenny Lau
 								<span class="caret"></span>
 							</a>
 							<ul class="dropdown-menu">
@@ -416,8 +416,7 @@
 	<div class="clearfix"></div>
 	
 	<footer>
-
-
+	<p> © 2016 Meowzer Inc.</p>
 	</footer>
 	
 	<!-- start: JavaScript-->

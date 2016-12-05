@@ -1,6 +1,9 @@
 <h1>Manage Items</h1>
-
-<?php 
+<?php
+	if (isset($flash))
+	{
+		echo $flash;
+	}
 	$create_item_url = base_url()."store_items/create";
 ?>
 

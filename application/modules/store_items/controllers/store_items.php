@@ -10,6 +10,91 @@ class Store_items extends MX_Controller
         $this->form_validation->CI =& $this;
 	}
 
+	function _process_delete($item_id)
+	{
+		// attempt to delete item colors
+		$this->load->module('store_item_colors');
+		$this->store_item_colors->_delete_for_item($item_id);
+
+		// attempt to delete item sizes
+		$this->load->module('store_item_sizes');
+		$this->store_item_colors->_delete_for_item($item_id);
+
+		// attempt to delete item big pics
+		// attempt to delete item small pics
+		$data = $this->fetch_data_from_db($item_id);
+		$big_pic = $data['big_pic'];
+		$small_pic = $data['small_pic'];
+
+		$big_pic_path= './big_pics/'.$big_pic;
+		$small_pic_path= './small_pics/'.$small_pic;
+
+		if (file_exists($big_pic_path))
+		{
+			unlink($big_pic_path);
+		}
+
+		if (file_exists($small_pic_path))
+		{
+			unlink($small_pic_path);
+		}
+
+		// delete the item record from store_items
+		$this->_delete($item_id);
+	}
+
+	function delete($update_id)
+	{
+		if (!is_numeric($update_id))
+		{
+			redirect('site_security/not_allowed');
+		}
+
+		$this->load->library('session');
+		$this->load->module('site_security');
+		$this->site_security->_make_sure_is_admin();
+
+		$submit = $this->input->post('submit', true);
+
+		if ($submit == "Cancel")
+		{
+			redirect('store_items/create/'.$update_id);
+		} elseif ($submit == "Yes - Delete Item") {
+			// process the delete item
+			$this->_process_delete($update_id);
+			// flash item was successfully deleted
+			$flash_msg = "The item details were successfully deleted.";
+			$value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
+			$this->session->set_flashdata('item', $value);
+
+			redirect('store_items/manage');
+		}
+	}
+
+	function deleteconf($update_id)
+	{
+		if (!is_numeric($update_id))
+		{
+			redirect('site_security/not_allowed');
+		}
+
+		$this->load->library('session');
+		$this->load->module('site_security');
+		$this->site_security->_make_sure_is_admin();
+
+		$this->load->library('session');
+		$this->load->module('site_security');
+		$this->site_security->_make_sure_is_admin();
+
+		$data['headline'] = "Delete Item";
+		$data['update_id'] = $update_id;
+		$data['flash'] = $this->session->flashdata('item');
+		$data['view_file'] = "deleteconf";
+		$this->load->module('templates');
+		$this->templates->admin($data);
+
+	}
+
 	function delete_image($update_id)
 	{
 		if (!is_numeric($update_id))
@@ -205,6 +290,7 @@ class Store_items extends MX_Controller
 			$data = $this->fetch_data_from_db($update_id);
 		} else {
 			$data = $this->fetch_data_from_post();
+			$data['big_pic'] = "";
 		}
 
 		if (!is_numeric($update_id))
@@ -228,6 +314,8 @@ class Store_items extends MX_Controller
 	{
 		$this->load->module('site_security');
 		$this->site_security->_make_sure_is_admin();
+
+		$data['flash'] = $this->session->flashdata('item');
 
 		$data['query'] = $this->get('item_title');		
 		// $data['view_module'] = "store_items";

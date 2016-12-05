@@ -7,6 +7,12 @@ class Store_item_colors extends MX_Controller
 
 	}
 
+	function _delete_for_item($item_id)
+	{
+		$mysql_query = "delete from store_item_colors where item_id = $item_id";
+		$query = $this->_custom_query($mysql_query);
+	}
+
 	function delete($update_id)
 	{
 		if (!is_numeric($update_id))
