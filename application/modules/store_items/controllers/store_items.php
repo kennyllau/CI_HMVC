@@ -10,6 +10,49 @@ class Store_items extends MX_Controller
         $this->form_validation->CI =& $this;
 	}
 
+	function delete_image($update_id)
+	{
+		if (!is_numeric($update_id))
+		{
+			redirect('site_security/not_allowed');
+		}
+
+		$this->load->library('session');
+		$this->load->module('site_security');
+		$this->site_security->_make_sure_is_admin();
+
+		$data = $this->fetch_data_from_db($update_id);
+		$big_pic = $data['big_pic'];
+		$small_pic = $data['small_pic'];
+
+		$big_pic_path= './big_pics/'.$big_pic;
+		$small_pic_path= './small_pics/'.$small_pic;
+
+		// attempt to remove the images
+		if (file_exists($big_pic_path))
+		{
+			unlink($big_pic_path);
+		}
+
+		if (file_exists($small_pic_path))
+		{
+			unlink($small_pic_path);
+		}
+
+		// update the database
+		unset($data);
+		$data['big_pic'] = "";
+		$data['small_pic'] = "";
+		$this->_update($update_id, $data);
+
+		$flash_msg = "The item details were successfully deleted.";
+		$value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
+		$this->session->set_flashdata('item', $value);
+
+		redirect('store_items/create/'.$update_id);
+
+	}	
+
 	function _generate_thumbnail($file_name)
 	// _ makes the function private
 	{
@@ -75,6 +118,7 @@ class Store_items extends MX_Controller
             $file_name = $upload_data['file_name'];
             $this->_generate_thumbnail($file_name);
 
+            // update the database
             $update_data['big_pic'] = $file_name;
             $update_data['small_pic'] = $file_name;
             $this->_update($update_id, $update_data); 
@@ -205,6 +249,12 @@ class Store_items extends MX_Controller
 
 	function fetch_data_from_db($update_id)
 	{
+
+		if (!is_numeric($update_id))
+		{
+			redirect('site_security/not_allowed');
+		}
+
 		$query= $this->get_where($update_id);
 		foreach($query->result() as $row )
 		{

@@ -28,9 +28,9 @@
 
 		<div class="control-group">
 			<label class="control-label" for="fileInput">File input</label>
-		<div class="controls">
-			<input class="input-file uniform_on" id="fileInput" type="file" name="userfile" size="20">
-		</div>
+			<div class="controls">
+				<input class="input-file uniform_on" id="fileInput" type="file" name="userfile" size="20">
+			</div>
 		</div>          
 		<div class="form-actions">
 			<button type="submit" class="btn btn-primary" value="upload">Upload</button>
@@ -38,7 +38,7 @@
 		</div>
 
 	</fieldset>
-</form> 
+</form>
 <?php
 /*
 <?php echo form_open_multipart('store_items/do_upload/'.$update_id); ?>

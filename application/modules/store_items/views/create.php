@@ -25,7 +25,12 @@
 			</div>
 			<div class="box-content">
 
-				<a href="<?= base_url() ?>store_items/upload_image/<?= $update_id ?>"><button type="button" class="btn btn-primary">Upload Item Image</button></a>
+				<?php
+					if ($big_pic=="") { ?>
+						<a href="<?= base_url() ?>store_items/upload_image/<?= $update_id ?>"><button type="button" class="btn btn-primary">Upload Item Image</button></a>
+				<?php } else { ?>
+						<a href="<?= base_url() ?>store_items/delete_image/<?= $update_id ?>"><button type="button" class="btn btn-danger">Delete Item Image</button></a>
+				<?php } ?>
 				<a href="<?= base_url() ?>store_items/"><button type="button" class="btn btn-primary">Upload Item Color</button></a>
 				<a href="<?= base_url() ?>store_items/"><button type="button" class="btn btn-primary">Upload Item Sizes</button></a>
 				<a href="<?= base_url() ?>store_items/"><button type="button" class="btn btn-primary">Upload Item Categories</button></a>
@@ -105,4 +110,26 @@
 			</form>   
 		</div>
 	</div><!--/span-->
-</div><!--/row
+</div> <!-- /row -->
+
+<?php
+if ($big_pic!="") { ?>
+
+	<div class="row-fluid sortable">
+		<div class="box span12">
+			<div class="box-header" data-original-title>
+				<h2><i class="halflings-icon white edit"></i><span class="break"></span>Item Image</h2>
+				<div class="box-icon">
+					<a href="#" class="btn-minimize"><i class="halflings-icon white chevron-up"></i></a>
+					<a href="#" class="btn-close"><i class="halflings-icon white remove"></i></a>
+				</div>
+			</div>
+			<div class="box-content">
+
+				<img src="<?= base_url()?>big_pics/<?=$big_pic ?>">
+
+			</div>
+		</div><!--/span -->
+	</div><!--/row-->
+
+<?php } ?>
