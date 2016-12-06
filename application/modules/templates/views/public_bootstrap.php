@@ -55,14 +55,12 @@
       </div>
     </nav>
     <div class="container" style="min-height: 650px;">
-        <?php
-
-        if (isset($view_file))
-        {
-          $this->load->view($view_module.'/'.$view_file);
-        }
-
-      ?>
+<?php
+  if (isset($view_file))
+  {
+    $this->load->view($view_module.'/'.$view_file);
+  }
+?>
 
       <hr>
       </div>
