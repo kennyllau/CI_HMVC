@@ -10,6 +10,28 @@ class Store_items extends MX_Controller
         $this->form_validation->CI =& $this;
 	}
 
+	function view ($update_id)
+	{
+		if (!is_numeric($update_id))
+		{
+			redirect('site_security/not_allowed');
+		}
+
+		$this->load->library('session');
+		$this->load->module('site_security');
+		$this->site_security->_make_sure_is_admin();
+
+		// fetch the item
+		$data = $this->fetch_data_from_db($update_id);
+
+
+		$data['update_id'] = $update_id;
+		$data['flash'] = $this->session->flashdata('item');
+		$data['view_file'] = "view";
+		$this->load->module('templates');
+		$this->templates->public_bootstrap($data);
+	}
+
 	function _process_delete($item_id)
 	{
 		// attempt to delete item colors

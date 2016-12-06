@@ -5,10 +5,10 @@ What is NYAN NYAN
 Nyan Cat is the name of a YouTube video, uploaded in April 2011, which became an Internet meme. The video merged a Japanese pop song with an animated cartoon cat with a Pop-Tart for a body, flying through space, and leaving a rainbow trail behind it.
 
 *******************
-Release The Crackling!
+Release The Kraken!
 *******************
 
-This repo contains in-development code for future releases. 
+This meowing repo contains in-development code for future meowing releases. 
 
 **************************
 Changelog and New Features
@@ -18,7 +18,7 @@ You can find a list of all changes for each release in the `user
 guide change log <https://github.com/bcit-ci/CodeIgniter/blob/develop/user_guide_src/source/changelog.rst>`_.
 
 *******************
-Server Requirements
+Server Meow Requirements
 *******************
 
 PHP version 5.6 or newer is recommended.
@@ -59,4 +59,4 @@ Acknowledgement
 ***************
 
 The CodeIgniter team would like to thank EllisLab, all the
-contributors to the CodeIgniter project and you, the CodeIgniter user.
+contributors to the CodeIgniter project and you, the CodeIgniter Meowing user.
