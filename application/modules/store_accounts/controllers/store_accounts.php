@@ -6,15 +6,164 @@ class Store_accounts extends MX_Controller
 		parent::__construct();
 
 	}
+
+	function autogen ()
+	{
+		$mysql_query = "show columns from store_accounts";
+		$query = $this->_custom_query($mysql_query);
+		foreach ($query->result() as $row)
+		{
+			$column_name = $row->Field;
+
+			if ($column_name != "id" )
+			{
+				// echo $column_name."<br>";
+				// generate $data['first_name'] = $this->input->post('first_name', true); .. etc
+				echo '$data[\''.$column_name.'\'] = $this->input->post(\''.$column_name.'\', true);<br>';
+			}
+		}
+
+		echo '<br>';
+
+		foreach ($query->result() as $row)
+		{
+			$column_name = $row->Field;
+
+			if ($column_name != "id" )
+			{
+				// echo $column_name."<br>";
+				// generate $data['first_name'] = $this->input->post('first_name', true); .. etc
+				echo '$data[\''.$column_name.'\'] = $row->'.$column_name.';<br>';
+			}
+		}
+
+	}
+
+	function fetch_data_from_post()
+	{
+		$data['first_name'] = $this->input->post('first_name', true);
+		$data['last_name'] = $this->input->post('last_name', true);
+		$data['company'] = $this->input->post('company', true);
+		$data['address1'] = $this->input->post('address1', true);
+		$data['address2'] = $this->input->post('address2', true);
+		$data['city'] = $this->input->post('city', true);
+		$data['state'] = $this->input->post('state', true);
+		$data['postal_code'] = $this->input->post('postal_code', true);
+		$data['phone_number'] = $this->input->post('phone_number', true);
+		$data['email'] = $this->input->post('email', true);
+		$data['date_made'] = $this->input->post('date_made', true);
+		$data['password'] = $this->input->post('password', true);
+
+		return $data;
+	}
+
+	function fetch_data_from_db($update_id)
+	{
+
+		if (!is_numeric($update_id))
+		{
+			redirect('site_security/not_allowed');
+		}
+
+		$query= $this->get_where($update_id);
+		foreach($query->result() as $row )
+		{
+			$data['first_name'] = $row->first_name;
+			$data['last_name'] = $row->last_name;
+			$data['company'] = $row->company;
+			$data['address1'] = $row->address1;
+			$data['address2'] = $row->address2;
+			$data['city'] = $row->city;
+			$data['state'] = $row->state;
+			$data['postal_code'] = $row->postal_code;
+			$data['phone_number'] = $row->phone_number;
+			$data['email'] = $row->email;
+			$data['date_made'] = $row->date_made;
+			$data['password'] = $row->password;
+		}
+
+		if(!isset($data))
+		{
+			$data = "";
+		}
+
+		return $data;
+	}
+
+	function create()
+	{
+		$this->load->library('session');
+		$this->load->module('site_security');
+		$this->site_security->_make_sure_is_admin();
+
+		$update_id = $this->uri->segment(3);
+		$submit = $this->input->post('submit', true);
+
+		if ($submit == "Submit")
+		{
+			$this->load->library('form_validation');
+			$this->form_validation->set_rules('first_name', 'First Name', 'required');
+
+			if ($this->form_validation->run() == TRUE)
+			{
+				// get the variables
+				$data = $this->fetch_data_from_post();
+
+				if (is_numeric($update_id))
+				{
+					// update the details
+					$this->_update($update_id, $data);
+					$flash_msg = "The item details were successfully updated.";
+					$value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
+					$this->session->set_flashdata('item', $value);
+					redirect('store_items/create/'.$update_id);
+				} else {
+					// insert new item
+					$this->_insert($data);
+					$update_id = $this->get_max(); // get ID of new item
+					$flash_msg = "The item was successfully added";
+					$value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
+					$this->session->set_flashdata('item', $value);
+					redirect('store_items/create/'.$update_id);
+				}
+			}
+		} elseif ($submit == "Cancel") {
+			redirect('store_accounts/manage');
+		}
+
+		if ((is_numeric($update_id)) && ($submit != "Submit"))
+		{
+			$data = $this->fetch_data_from_db($update_id);
+		} else {
+			$data = $this->fetch_data_from_post();
+		}
+
+		if (!is_numeric($update_id))
+		{
+			$data['headline'] = "Add New Account";
+		} else {
+			$data['headline'] = "Account Details";
+		}
+
+		$data['update_id'] = $update_id;
+		$data['flash'] = $this->session->flashdata('item');
+
+		// $data['view_module'] = "store_items";
+		$data['view_file'] = "create";
+		$this->load->module('templates');
+		// load heirarchy module and pass $data to it
+		$this->templates->admin($data);
+	}
+
 	function manage()
 	{
 		$this->load->module('site_security');
 		$this->site_security->_make_sure_is_admin();
 
-		$data['flash'] = $this->session->flashdata('item');
+		$data['flash'] = $this->session->flashdata('Account');
 
 		$data['query'] = $this->get('last_name');		
-		// $data['view_module'] = "store_items";
+		// $data['view_module'] = "store_Accounts";
 		$data['view_file'] = "manage";
 		$this->load->module('templates');
 		$this->templates->admin($data);
