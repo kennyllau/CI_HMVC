@@ -33,18 +33,20 @@
 				  </tr>
 			  </thead>   
 			  <tbody>
-<?php 
+<?php
+	$this->load->module('timedate'); 
 	foreach($query->result() as $row) 
 	{ 
 		$edit_account_url = base_url()."store_accounts/create/".$row->id;
 		// edit_account_url is link to update Account button in inventory
 		$view_accounts_url = base_url()."store_accounts/view/".$row->id;
+		$date_created = $this->timedate->get_nice_date($row->date_made, 'cool');
 ?>
 				<tr>
 					<td><?= $row->first_name ?></td>
 					<td class="center"><?= $row->last_name ?></td>
 					<td class="center"><?= $row->company ?></td>
-					<td class="center"><?= $row->date_made ?></td>
+					<td class="center"><?= $date_created ?></td>
 
 					<td class="center">
 
