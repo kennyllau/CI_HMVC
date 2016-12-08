@@ -7,57 +7,60 @@ class Store_accounts extends MX_Controller
 
 	}
 
-	function autogen ()
+	function update_password()
 	{
-		$mysql_query = "show columns from store_accounts";
-		$query = $this->_custom_query($mysql_query);
-		/*
-		foreach ($query->result() as $row)
-		{
-			$column_name = $row->Field;
+		$this->load->library('session');
+		$this->load->module('site_security');
+		$this->site_security->_make_sure_is_admin();
 
-			if ($column_name != "id" )
-			{
-				// echo $column_name."<br>";
-				// generate $data['first_name'] = $this->input->post('first_name', true); .. etc
-				echo '$data[\''.$column_name.'\'] = $this->input->post(\''.$column_name.'\', true);<br>';
-			}
+		$update_id = $this->uri->segment(3);
+		$submit = $this->input->post('submit', true);
+
+		if (!is_numeric($update_id))
+		{
+			redirect('store_accounts/manage');
+		} 
+		elseif ($submit == "Cancel")
+		{
+			redirect('store_accounts/create/'.$update_id);
 		}
 
-		echo '<br>';
-
-		foreach ($query->result() as $row)
+		if ($submit == "Submit")
 		{
-			$column_name = $row->Field;
+			$this->load->library('form_validation');
+			$this->form_validation->set_rules('password', 'Password', 'required|min_length[7]|max_length[35]');
+			$this->form_validation->set_rules('confirm_password', 'Confirm Password', 'required|matches[password]');
 
-			if ($column_name != "id" )
+			if ($this->form_validation->run() == TRUE)
 			{
-				// echo $column_name."<br>";
-				// generate $data['first_name'] = $this->input->post('first_name', true); .. etc
-				echo '$data[\''.$column_name.'\'] = $row->'.$column_name.';<br>';
-			}
-		}
-		*/
-		foreach ($query->result() as $row)
-		{
-			$column_name = $row->Field;
+				// get the variables
+				$data['password'] = $this->input->post('password', true);
 
-			if ($column_name != "id" )
-			{
-
-				$var = '<div class="control-group">
-					<label class="control-label" for="typeahead">'.ucfirst($column_name).' </label>
-				    <div class="controls">
-						<input type="text" class="span6" name="'.$column_name.'" value="<?= $'.$column_name.' ?>">
-				  	</div>
-				</div>';
-
-				echo htmlentities($var);
-				echo '<br>'; 
+				// update account details
+				$this->_update($update_id, $data);
+				$flash_msg = "The account password was successfully updated.";
+				$value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
+				$this->session->set_flashdata('item', $value);
+				redirect('store_accounts/create/'.$update_id);
 
 			}
+
+		} 
+		elseif ($submit == "Cancel") 
+		{
+			redirect('store_accounts/manage');
 		}
 
+		$data['headline'] = "Update Account Password";
+
+		$data['update_id'] = $update_id;
+		$data['flash'] = $this->session->flashdata('item');
+
+		// $data['view_module'] = "store_items";
+		$data['view_file'] = "update_password";
+		$this->load->module('templates');
+		// load heirarchy module and pass $data to it
+		$this->templates->admin($data);
 	}
 
 	function fetch_data_from_post()
@@ -72,7 +75,6 @@ class Store_accounts extends MX_Controller
 		$data['postal_code'] = $this->input->post('postal_code', true);
 		$data['phone_number'] = $this->input->post('phone_number', true);
 		$data['email'] = $this->input->post('email', true);
-
 
 		return $data;
 	}
@@ -123,6 +125,15 @@ class Store_accounts extends MX_Controller
 		{
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('first_name', 'First Name', 'required');
+			$this->form_validation->set_rules('last_name', 'Last Name', 'required');
+			$this->form_validation->set_rules('company', 'Company', 'required');
+			$this->form_validation->set_rules('address1', 'Address Line 1', 'required');
+			$this->form_validation->set_rules('city', 'City', 'required');
+			$this->form_validation->set_rules('state', 'State', 'required');
+			$this->form_validation->set_rules('postal_code', 'Postal Code', 'required');
+			$this->form_validation->set_rules('phone_number', 'Phone Number', 'required');
+			$this->form_validation->set_rules('email', 'Email', 'required');
+			$this->form_validation->set_rules('password', 'Password', 'required');
 
 			if ($this->form_validation->run() == TRUE)
 			{
@@ -256,6 +267,59 @@ class Store_accounts extends MX_Controller
 		$this->load->model('mdl_store_accounts');
 		$query = $this->mdl_store_accounts->_custom_query($mysql_query);
 		return $query;
+	}
+
+	function autogen ()
+	{
+		$mysql_query = "show columns from store_accounts";
+		$query = $this->_custom_query($mysql_query);
+		/*
+		foreach ($query->result() as $row)
+		{
+			$column_name = $row->Field;
+
+			if ($column_name != "id" )
+			{
+				// echo $column_name."<br>";
+				// generate $data['first_name'] = $this->input->post('first_name', true); .. etc
+				echo '$data[\''.$column_name.'\'] = $this->input->post(\''.$column_name.'\', true);<br>';
+			}
+		}
+
+		echo '<br>';
+
+		foreach ($query->result() as $row)
+		{
+			$column_name = $row->Field;
+
+			if ($column_name != "id" )
+			{
+				// echo $column_name."<br>";
+				// generate $data['first_name'] = $this->input->post('first_name', true); .. etc
+				echo '$data[\''.$column_name.'\'] = $row->'.$column_name.';<br>';
+			}
+		}
+		*/
+		foreach ($query->result() as $row)
+		{
+			$column_name = $row->Field;
+
+			if ($column_name != "id" )
+			{
+
+				$var = '<div class="control-group">
+					<label class="control-label" for="typeahead">'.ucfirst($column_name).' </label>
+				    <div class="controls">
+						<input type="text" class="span6" name="'.$column_name.'" value="<?= $'.$column_name.' ?>">
+				  	</div>
+				</div>';
+
+				echo htmlentities($var);
+				echo '<br>'; 
+
+			}
+		}
+
 	}
 
 }
