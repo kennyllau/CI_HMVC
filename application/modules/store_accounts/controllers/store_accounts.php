@@ -11,6 +11,7 @@ class Store_accounts extends MX_Controller
 	{
 		$mysql_query = "show columns from store_accounts";
 		$query = $this->_custom_query($mysql_query);
+		/*
 		foreach ($query->result() as $row)
 		{
 			$column_name = $row->Field;
@@ -36,6 +37,26 @@ class Store_accounts extends MX_Controller
 				echo '$data[\''.$column_name.'\'] = $row->'.$column_name.';<br>';
 			}
 		}
+		*/
+		foreach ($query->result() as $row)
+		{
+			$column_name = $row->Field;
+
+			if ($column_name != "id" )
+			{
+
+				$var = '<div class="control-group">
+					<label class="control-label" for="typeahead">'.ucfirst($column_name).' </label>
+				    <div class="controls">
+						<input type="text" class="span6" name="'.$column_name.'" value="<?= $'.$column_name.' ?>">
+				  	</div>
+				</div>';
+
+				echo htmlentities($var);
+				echo '<br>'; 
+
+			}
+		}
 
 	}
 
@@ -51,8 +72,7 @@ class Store_accounts extends MX_Controller
 		$data['postal_code'] = $this->input->post('postal_code', true);
 		$data['phone_number'] = $this->input->post('phone_number', true);
 		$data['email'] = $this->input->post('email', true);
-		$data['date_made'] = $this->input->post('date_made', true);
-		$data['password'] = $this->input->post('password', true);
+
 
 		return $data;
 	}
@@ -111,20 +131,22 @@ class Store_accounts extends MX_Controller
 
 				if (is_numeric($update_id))
 				{
-					// update the details
+					// update account details
 					$this->_update($update_id, $data);
-					$flash_msg = "The item details were successfully updated.";
+					$flash_msg = "The account details were successfully updated.";
 					$value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
 					$this->session->set_flashdata('item', $value);
-					redirect('store_items/create/'.$update_id);
+					redirect('store_accounts/create/'.$update_id);
 				} else {
-					// insert new item
+					// create new account
+					$data['date_made'] = time();
+					// save date created in unixtimestamp
 					$this->_insert($data);
 					$update_id = $this->get_max(); // get ID of new item
-					$flash_msg = "The item was successfully added";
+					$flash_msg = "The account was successfully added";
 					$value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
 					$this->session->set_flashdata('item', $value);
-					redirect('store_items/create/'.$update_id);
+					redirect('store_accounts/create/'.$update_id);
 				}
 			}
 		} elseif ($submit == "Cancel") {

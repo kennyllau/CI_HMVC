@@ -8,7 +8,7 @@
 ?>
 
 <p style="margin-top: 50px;">
-	<a href="<?= $create_account_url ?>"><button type="button" class="btn btn-primary">Add New Account</button></a>
+	<a href="<?= $create_account_url ?>"><button type="button" class="btn btn-success">Add New Account</button></a>
 </p>
 
 <div class="row-fluid sortable">		
@@ -36,31 +36,18 @@
 <?php 
 	foreach($query->result() as $row) 
 	{ 
-		$edit_Account_url = base_url()."store_accounts/create/".$row->id;
-		// edit_Account_url is link to update Account button in inventory
-
-		$status = $row->status;
-
-		if ($status == 1)
-		{
-			$status_label = "success";
-			$status_description = "Active";
-		} else {
-			$status_label = "default";
-			$status_description = "inActive";
-		}
+		$edit_account_url = base_url()."store_accounts/create/".$row->id;
+		// edit_account_url is link to update Account button in inventory
+		$view_accounts_url = base_url()."store_accounts/view/".$row->id;
 ?>
 				<tr>
-					<td><?= $row->account_title ?></td>
-					<td class="center"><?= $row->account_price ?></td>
-					<td class="center"><?= $row->account_price ?></td>
+					<td><?= $row->first_name ?></td>
+					<td class="center"><?= $row->last_name ?></td>
+					<td class="center"><?= $row->company ?></td>
+					<td class="center"><?= $row->date_made ?></td>
+
 					<td class="center">
-						<span class="label label-<?= $status_label?>"><?= $status_description ?></span>
-					</td>
-					<td class="center">
-						<a class="btn btn-success" href="#">
-							<i class="halflings-icon white zoom-in"></i>  
-						</a>
+
 						<a class="btn btn-info" href="<?= $edit_account_url ?>">
 							<i class="halflings-icon white edit"></i>  
 						</a>
