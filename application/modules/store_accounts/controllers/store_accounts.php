@@ -34,7 +34,9 @@ class Store_accounts extends MX_Controller
 			if ($this->form_validation->run() == TRUE)
 			{
 				// get the variables
-				$data['password'] = $this->input->post('password', true);
+				$password = $this->input->post('password', true);
+				$this->load->module('site_security');
+				$data['password'] = $this->site_security->_hash_string($password);
 
 				// update account details
 				$this->_update($update_id, $data);
