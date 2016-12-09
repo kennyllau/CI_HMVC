@@ -7,7 +7,15 @@ class Store_categories extends MX_Controller
 
 	}
 
-	function fetch_data_from_post()
+	function _get_category_title ($update_id)
+	{
+		$data = $this->fetch_data_from_db($update_id);
+		$category_title = $data['category_title'];
+
+		return $category_title;
+	}
+
+	function fetch_data_from_post ()
 	{
 		$data['category_title'] = $this->input->post('category_title', true);
 		$data['parent_category_id'] = $this->input->post('parent_category_id', true);
@@ -15,7 +23,7 @@ class Store_categories extends MX_Controller
 		return $data;
 	}
 
-	function fetch_data_from_db($update_id)
+	function fetch_data_from_db ($update_id)
 	{
 
 		if (!is_numeric($update_id))
@@ -36,6 +44,27 @@ class Store_categories extends MX_Controller
 		}
 
 		return $data;
+	}
+
+	function _get_dropdown_options($update_id)
+	{
+		if (!is_numeric($update_id))
+		{
+			$update_id = 0;
+		}
+
+		$options[''] = "Please Select...";
+		// build array of all parent categories
+		// dont want the category that we are already on to be an option
+		$mysql_query = "select * from store_categories where parent_category_id = 0 and id != $update_id";
+		$query = $this->_custom_query($mysql_query);
+
+		foreach($query->result() as $row)
+		{
+			$options[$row->id] = $row->category_title;
+		}
+
+		return $options;
 	}
 
 	function create()
@@ -92,6 +121,10 @@ class Store_categories extends MX_Controller
 		} else {
 			$data['headline'] = "Update Category";
 		}
+
+		// _get_dropdown_options function above^
+		$data['options'] = $this->_get_dropdown_options($update_id);
+		$data['num_dropdown_options'] = count($data['options']);
 
 		$data['update_id'] = $update_id;
 		$data['flash'] = $this->session->flashdata('item');

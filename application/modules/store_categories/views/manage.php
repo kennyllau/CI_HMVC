@@ -32,28 +32,25 @@
 			  </thead>   
 			  <tbody>
 <?php 
+	$this->load->module('store_categories');
 	foreach($query->result() as $row) 
 	{ 
-		$edit_item_url = base_url()."store_items/create/".$row->id;
-		// edit_item_url is link to update item button in inventory
+		$edit_item_url = base_url()."store_categories/create/".$row->id;
+		$view_item_url = base_url()."store_categories/view/".$row->id;
 
-		$status = $row->status;
-
-		if ($status == 1)
+		if ($row->parent_category_id == 0)
 		{
-			$status_label = "success";
-			$status_description = "Active";
-		} else {
-			$status_label = "default";
-			$status_description = "inActive";
+			$parent_category_title = "-";
 		}
+		else
+		{
+			$parent_category_title = $this->store_categories->_get_category_title($row->parent_category_id);
+		}
+		
 ?>
 				<tr>
 					<td><?= $row->category_title ?></td>
-
-					<td class="center">
-						<span class="label label-<?= $status_label?>"><?= $status_description ?></span>
-					</td>
+					<td class="center"><?= $parent_category_title ?></td>
 					<td class="center">
 						<a class="btn btn-success" href="#">
 							<i class="halflings-icon white zoom-in"></i>  

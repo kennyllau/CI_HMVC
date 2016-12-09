@@ -1,9 +1,9 @@
 <h1><?= $headline ?></h1>
 <?php 
-	$manage_item_url = base_url()."store_items/manage";
+	$manage_category_url = base_url()."store_categories/manage";
 ?>
 	<p style="margin-top: 50px;">
-	<a href="<?= $manage_item_url ?>"><button type="button" class="btn btn-primary">Manage Items</button></a>
+	<a href="<?= $manage_category_url ?>"><button type="button" class="btn btn-primary">Go Back</button></a>
 	</p> 
 <?= validation_errors("<p style='color: red;'>", "</p>") ?>
 <?php
@@ -29,6 +29,18 @@
 		<div class="box-content">
 			<form class="form-horizontal" action="<?= $form_location ?>" method="post">
 				<fieldset>
+				<?php if ($num_dropdown_options > 1) { ?>
+					<div class="control-group">
+					    <label class="control-label" for="typeahead">Parent Category</label>
+					    <div class="controls">								
+							<?php
+							  	$additional_drop_down_code = 'id="selectError3"';
+
+							  	echo form_dropdown('parent_category_id', $options, $parent_category_id, $additional_drop_down_code); 
+							?> 
+						</div>
+					</div> 
+					<?php } else { echo form_hidden('parent_category_id', 0); } ?> 
 
 					<div class="control-group">
 						<label class="control-label" for="typeahead">Category Title </label>
