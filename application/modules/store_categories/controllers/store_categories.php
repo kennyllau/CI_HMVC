@@ -7,6 +7,15 @@ class Store_categories extends MX_Controller
 
 	}
 
+	function _count_sub_categories($update_id)
+	{
+		// return the number of sub categories, belonging to this category
+		$query = $this->get_where_custom('parent_category_id', $update_id);
+		$num_rows = $query->num_rows();
+
+		return $num_rows;
+	}
+
 	function _get_category_title ($update_id)
 	{
 		$data = $this->fetch_data_from_db($update_id);
@@ -138,9 +147,15 @@ class Store_categories extends MX_Controller
 		$this->load->module('site_security');
 		$this->site_security->_make_sure_is_admin();
 
+		$parent_category_id = $this->uri->segment(3);
+		if (!is_numeric($parent_category_id))
+		{
+			$parent_category_id = 0;
+		}
+
 		$data['flash'] = $this->session->flashdata('item');
 
-		$data['query'] = $this->get('category_title');		
+		$data['query'] = $this->get_where_custom('parent_category_id', $parent_category_id);		
 		$data['view_file'] = "manage";
 		$this->load->module('templates');
 		$this->templates->admin($data);
