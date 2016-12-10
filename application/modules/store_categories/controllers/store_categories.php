@@ -7,10 +7,38 @@ class Store_categories extends MX_Controller
 
 	}
 
+	function sort ()
+	{
+		$this->load->module('site_security');
+		$this->site_security->_make_sure_is_admin();
+
+		$number = $this->input->post('number', true);
+		for ($i=0; $i<=$number; $i++)
+		{
+			$update_id = $_POST['order'.$i];
+			$data['priority'] = $i;
+			$this->_update($update_id, $data);
+		}
+
+
+		// to test posted info column
+		// $info = "The following was posted
+		// ";
+		// foreach ($_POST as $key => $value) {
+		// 	$info.= "key of $key with value of $value
+		// 	";
+
+		// }
+		// $data['posted_info'] = $info;
+		// $update_id = 1;
+		// $this->_update($update_id, $data);
+	}
+
 	function _draw_sortable_list ($parent_category_id)
 	{
-		$data['query'] = $this->get_where_custom('parent_category_id', $parent_category_id);
-
+		// $data['query'] = $this->get_where_custom('parent_category_id', $parent_category_id);
+		$mysql_query = "select * from store_categories where parent_category_id = $parent_category_id order by priority";
+		$data['query'] = $this->_custom_query($mysql_query);
 		$this->load->view('sortable_list', $data);	
 	}
 

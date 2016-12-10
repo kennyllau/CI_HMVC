@@ -23,7 +23,7 @@
 				$parent_category_title = $this->store_categories->_get_category_title($row->parent_category_id);
 			}	
 	?>
-	<li class="sort"><i class="icon-sort"></i><?= $row->category_title ?>
+	<li class="sort" id="<?= $row->id ?>"><i class="icon-sort"></i><?= $row->category_title ?>
 
 	<?= $parent_category_title ?>
 
