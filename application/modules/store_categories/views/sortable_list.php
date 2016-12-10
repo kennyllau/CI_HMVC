@@ -8,7 +8,7 @@
 	}
 </style>
 
-<ul>
+<ul id="sortlist">
 	<?php 
 		$this->load->module('store_categories');
 		foreach($query->result() as $row) 

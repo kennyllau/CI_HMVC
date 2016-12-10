@@ -160,6 +160,8 @@ class Store_categories extends MX_Controller
 			$parent_category_id = 0;
 		}
 
+		$data['sort_this'] = true;
+
 		$data['parent_category_id'] = $parent_category_id;
 		$data['flash'] = $this->session->flashdata('item');
 
