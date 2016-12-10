@@ -7,6 +7,13 @@ class Store_categories extends MX_Controller
 
 	}
 
+	function _draw_sortable_list ($parent_category_id)
+	{
+		$data['query'] = $this->get_where_custom('parent_category_id', $parent_category_id);
+
+		$this->load->view('sortable_list', $data);	
+	}
+
 	function _count_sub_categories($update_id)
 	{
 		// return the number of sub categories, belonging to this category
@@ -153,6 +160,7 @@ class Store_categories extends MX_Controller
 			$parent_category_id = 0;
 		}
 
+		$data['parent_category_id'] = $parent_category_id;
 		$data['flash'] = $this->session->flashdata('item');
 
 		$data['query'] = $this->get_where_custom('parent_category_id', $parent_category_id);		

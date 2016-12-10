@@ -21,7 +21,14 @@
 			</div>
 		</div>
 		<div class="box-content">
-			<table class="table table-striped table-bordered bootstrap-datatable datatable">
+
+		<!-- <?= $parent_category_id ?> -->
+		<?= Modules::run('store_categories/_draw_sortable_list', $parent_category_id) ?>
+
+
+
+
+			<!-- <table class="table table-striped table-bordered bootstrap-datatable datatable">
 			  <thead>
 				  <tr>
 					  <th>Category Title</th>
@@ -79,7 +86,7 @@
 				</tr>
 <?php } ?>
 			  </tbody>
-		  </table>            
+		  </table>             -->
 		</div>
 	</div><!--/span-->
 
