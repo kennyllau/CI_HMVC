@@ -33,7 +33,9 @@
 				<?php } ?>
 				<a href="<?= base_url() ?>store_item_colors/update/<?= $update_id ?>"><button type="button" class="btn btn-primary">Upload Item Color</button></a>
 				<a href="<?= base_url() ?>store_item_sizes/update/<?= $update_id ?>"><button type="button" class="btn btn-primary">Upload Item Sizes</button></a>
-				<a href="<?= base_url() ?>store_items/"><button type="button" class="btn btn-primary">Upload Item Categories</button></a>
+
+				<a href="<?= base_url() ?>store_category_assign/update/<?= $update_id ?>"><button type="button" class="btn btn-primary">Upload Item Categories</button></a>
+
 				<a href="<?= base_url() ?>store_items/deleteconf/<?= $update_id ?>"><button type="button" class="btn btn-danger">Delete</button></a>
 				<a href="<?= base_url() ?>store_items/view/<?= $update_id ?>"><button type="button" class="btn btn-default">View Item In Shop</button></a>
 
