@@ -7,6 +7,18 @@ class Store_categories extends MX_Controller
 
 	}
 
+	function _draw_top_nav ()
+	{
+		$mysql_query = "select * from store_categories where parent_category_id = 0 order by priority";
+		$query = $this->_custom_query($mysql_query);
+		foreach( $query->result() as $row)
+		{
+			$parent_categories[$row->id] = $row->category_title;
+		}
+		$data['parent_categories'] = $parent_categories;
+		$this->load->view('top_nav', $data);
+	}
+
 	function _get_parent_category_title ($update_id)
 	{
 		$data = $this->fetch_data_from_db($update_id);
