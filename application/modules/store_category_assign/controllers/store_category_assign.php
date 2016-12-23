@@ -7,6 +7,77 @@ class Store_category_assign extends MX_Controller
 
 	}
 
+	function _delete_for_item($item_id)
+	{
+		$mysql_query = "delete from store_item_colors where item_id = $item_id";
+		$query = $this->_custom_query($mysql_query);
+	}
+
+	function delete($update_id)
+	{
+		if (!is_numeric($update_id))
+		{
+			redirect('site_security/not_allowed');
+		}
+
+		$this->load->library('session');
+		$this->load->module('site_security');
+		$this->site_security->_make_sure_is_admin();
+
+		// fetch the item_id
+		$query = $this->get_where($update_id);
+		foreach($query->result() as $row)
+		{
+			$item_id = $row->item_id;
+		}
+
+		$this->_delete($update_id);
+
+		$flash_msg = "The option was successfully deleted.";
+		$value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
+		$this->session->set_flashdata('item', $value);
+
+		redirect('store_category_assign/update/'.$item_id);
+	}
+
+	function submit($item_id)
+	{
+		if (!is_numeric($item_id))
+		{
+			redirect('site_security/not_allowed');
+		}
+
+		$this->load->library('session');
+		$this->load->module('site_security');
+		$this->site_security->_make_sure_is_admin();
+
+		$submit = $this->input->post('submit', true);
+		$category_id = trim($this->input->post('category_id', true));
+
+		if ($submit=="Finished")
+		{
+			redirect('store_items/create/'.$item_id);
+		} elseif ($submit == "Submit") {
+			// attempt an insert
+			if($category_id!="")
+			{
+				$data['item_id'] = $item_id;
+				$data['category_id'] = $category_id;
+				$this->_insert($data);
+
+				$this->load->module('store_categories');
+				$category_title = $this->store_categories->_get_category_title($category_id);
+
+				$flash_msg = "The item was successfully assigned ".$category_title." to the category.";
+				$value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
+				$this->session->set_flashdata('item', $value);
+			}
+		}
+
+		redirect('store_category_assign/update/'.$item_id);
+
+	}
+
 	function update ($item_id)
 	{
 		if (!is_numeric($item_id))
@@ -20,26 +91,30 @@ class Store_category_assign extends MX_Controller
 
 		// get an array of all sub categories on the site
 		$this->load->module('store_categories');
-		$query = $this->store_categories->get_where_custom('parent_category_id !=', '0');
-		foreach ($query->result() as $row)
-		{
-			$sub_catgories[$row->id] = $row->category_title;
-		}
-
+		$sub_categories = $this->store_categories->_get_all_sub_cats_for_dropdown();
+		
 		// get an array of all assigned categories
 		$query = $this->get_where_custom('item_id', $item_id);
+		$data['query'] = $query;
 		$data['num_rows'] = $query->num_rows();
-		foreach ($query->result() as $row) 
-		{
-			$assigned_categories[$row->category_id]	= $row->category_title;
-		}
 
-		if (!isset($assigned_categories))
-		{
-			$assigned_categories = "";
-		}
+			foreach ($query->result() as $row) 
+			{
+				$category_title = $this->store_categories->_get_category_title($row->category_id);
+				$parent_category_title = $this->store_categories->_get_parent_category_title ($row->category_id);
+				$assigned_categories[$row->category_id]	= $parent_category_title. " > " .$category_title; 
+			}	
 
-		$data['options'] = $sub_catgories;
+			if (!isset($assigned_categories))
+			{
+				$assigned_categories = "";
+			}
+			else // the item has been assigned to at least one category
+			{
+				$sub_categories = array_diff($sub_categories, $assigned_categories);
+			}
+
+		$data['options'] = $sub_categories;
 		$data['category_id'] = $this->input->post('category_id', true);
 
 		$data['headline'] = "Assign Category";

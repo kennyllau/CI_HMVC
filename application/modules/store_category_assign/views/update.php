@@ -25,14 +25,14 @@
 		</div>
 
 <?php
-	$form_location = base_url()."store_item_colors/submit/".$item_id;
+	$form_location = base_url()."store_category_assign/submit/".$item_id;
 ?>
 		<div class="box-content">
 		<p>Submit new categories as required. </p>
 			<form class="form-horizontal" action="<?= $form_location ?>" method="post">
 				<fieldset>
 					<div class="control-group">
-						<label class="control-label" for="typeahead">New Option </label>
+						<label class="control-label" for="typeahead">New Category </label>
 					    <div class="controls">
 							
 					    <?php
@@ -58,7 +58,7 @@
 <div class="row-fluid sortable">		
 	<div class="box span12">
 		<div class="box-header" data-original-title>
-			<h2><i class="halflings-icon white edit"></i><span class="break"></span>Existing Color Options</h2>
+			<h2><i class="halflings-icon white edit"></i><span class="break"></span>Existing Assigned Categories For This Item</h2>
 			<div class="box-icon">
 
 				<a href="#" class="btn-minimize"><i class="halflings-icon white chevron-up"></i></a>
@@ -70,20 +70,24 @@
 			  <thead>
 				  <tr>
 					  <th>Count</th>
-					  <th>Color</th>
+					  <th>Category Title</th>
 					  <th>Actions</th>
 				  </tr>
 			  </thead>   
 			  <tbody>
 <?php
 	$count = 0; 
+	$this->load->module('store_categories');
 	foreach($query->result() as $row) { 
 		$count++;
-		$delete_url = base_url()."store_item_colors/delete/".$row->id;
+		$delete_url = base_url()."store_category_assign/delete/".$row->id;
+		$parent_category_title = $this->store_categories->_get_parent_category_title($row->category_id);
+		$category_title = $this->store_categories->_get_category_title($row->category_id);
+		$long_category_title = $parent_category_title." > ".$category_title;
 ?>
 				<tr>
 					<td><?= $count ?></td>
-					<td class="center"><?= $row->color ?></td>
+					<td class="center"><?= $long_category_title ?></td>
 				
 					<td class="center">
 						<a class="btn btn-danger" href="<?= $delete_url ?>">

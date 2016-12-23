@@ -7,6 +7,33 @@ class Store_categories extends MX_Controller
 
 	}
 
+	function _get_parent_category_title ($update_id)
+	{
+		$data = $this->fetch_data_from_db($update_id);
+		$parent_category_id = $data['parent_category_id'];
+		$parent_category_title = $this->_get_category_title($parent_category_id);
+		return $parent_category_title;
+	}
+
+	function _get_all_sub_cats_for_dropdown ()
+	{
+		// NOTE: this gets used on store_category_assign
+		$mysql_query = "select * from store_categories where parent_category_id != 0 order by parent_category_id, category_title";
+		$query = $this->_custom_query($mysql_query);
+		foreach($query->result() as $row)
+		{
+			$parent_category_title = $this->_get_category_title($row->parent_category_id);
+			$sub_categories[$row->id] = $parent_category_title." > ".$row->category_title;
+		}
+
+		if (!isset($sub_categories))
+		{
+			$sub_categories = "";
+		}
+
+		return $sub_categories;
+	}
+
 	function sort ()
 	{
 		$this->load->module('site_security');
