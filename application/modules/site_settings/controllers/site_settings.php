@@ -10,14 +10,14 @@ class Site_settings extends MX_Controller
 	function _get_item_segments ()
 	{
 		// return the segments for the store_item pages ( produce page )
-		$segments = "make/model/";
+		$segments = "company/model/";
 		return $segments;
 	}
 
 	function _get_items_segments ()
 	{
 		// return the segments for the category pages 
-		$segments = "make/models/";
+		$segments = "company/models/";
 		return $segments;
 	}
 

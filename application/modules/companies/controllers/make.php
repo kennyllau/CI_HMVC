@@ -1,5 +1,5 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
-class Make extends MX_Controller
+class Companies extends MX_Controller
 {
 	function __construct() {
 

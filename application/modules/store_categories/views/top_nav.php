@@ -13,7 +13,8 @@
     	$query = $this->store_categories->get_where_custom('parent_category_id', $parent_category_id);
     	foreach($query->result() as $row)
     	{
-    		echo '<li><a href="#">'.$row->category_title.'</a></li>';
+            $category_url = $row->category_url;
+    		echo '<li><a href="'.$target_url_start.$category_url.'">'.$row->category_title.'</a></li>';
     	}
     ?>
     </ul>

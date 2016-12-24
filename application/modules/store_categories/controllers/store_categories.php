@@ -7,6 +7,58 @@ class Store_categories extends MX_Controller
 
 	}
 
+	function view ($update_id)
+	{
+		if (!is_numeric($update_id))
+		{
+			redirect('site_security/not_allowed');
+		}
+
+		$this->load->library('session');
+		$this->load->module('site_security');
+		$this->site_security->_make_sure_is_admin();
+
+		// fetch the item
+		$data = $this->fetch_data_from_db($update_id);
+
+
+		$data['update_id'] = $update_id;
+		$data['flash'] = $this->session->flashdata('item');
+		$data['view_module'] = 'store_categories';
+		$data['view_file'] = "view";
+		$this->load->module('templates');
+		$this->templates->public_bootstrap($data);
+	}
+
+	function _get_category_id_from_category_url($category_url)
+	{
+		$query = $this->get_where_custom('category_url', $category_url);
+		foreach($query->result() as $row)
+		{
+			$category_id = $row->id;
+		}
+
+		if (!isset($category_id))
+		{
+			$category_id = 0;
+		}
+
+		return $category_id;
+	}
+
+	// function update all the null rows for store_categories category_url
+	// function fix ()
+	// {
+	// 	$query = $this->get('id');
+	// 	foreach($query->result() as $row)
+	// 	{
+	// 		$data['category_url'] = url_title($row->category_title);
+	// 		$this->_update($row->id, $data);
+	// 	}
+
+	// 	echo "finished updateing url";
+	// }
+
 	function _draw_top_nav ()
 	{
 		$mysql_query = "select * from store_categories where parent_category_id = 0 order by priority";
@@ -15,6 +67,11 @@ class Store_categories extends MX_Controller
 		{
 			$parent_categories[$row->id] = $row->category_title;
 		}
+
+		$this->load->module('site_settings');
+		$items_segments = $this->site_settings->_get_items_segments();
+		$data['target_url_start'] = base_url().$items_segments;
+
 		$data['parent_categories'] = $parent_categories;
 		$this->load->view('top_nav', $data);
 	}
@@ -118,6 +175,7 @@ class Store_categories extends MX_Controller
 		foreach($query->result() as $row )
 		{
 			$data['category_title'] = $row->category_title;
+			$data['category_url'] = $row->category_url;
 			$data['parent_category_id'] = $row->parent_category_id;
 		}
 
@@ -168,6 +226,7 @@ class Store_categories extends MX_Controller
 			{
 				// get the variables
 				$data = $this->fetch_data_from_post();
+				$data['category_url'] = url_title($data['category_title']);
 
 				if (is_numeric($update_id))
 				{
