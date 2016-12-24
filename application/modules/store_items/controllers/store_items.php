@@ -10,6 +10,22 @@ class Store_items extends MX_Controller
         $this->form_validation->CI =& $this;
 	}
 
+	function _get_item_id_from_url ($item_url)
+	{
+		$query = $this->get_where_custom('item_url', $item_url);
+		foreach($query->result() as $row)
+		{
+			$item_id = $row->id;
+		}
+
+		if (!isset($item_id))
+		{
+			$item_id = 0;
+		}
+
+		return $item_id;
+	}
+
 	function view ($update_id)
 	{
 		if (!is_numeric($update_id))
@@ -27,6 +43,7 @@ class Store_items extends MX_Controller
 
 		$data['update_id'] = $update_id;
 		$data['flash'] = $this->session->flashdata('item');
+		$data['view_module'] = 'store_items';
 		$data['view_file'] = "view";
 		$this->load->module('templates');
 		$this->templates->public_bootstrap($data);

@@ -40,10 +40,12 @@ class Mdl_store_item_colors extends CI_Model
 		return $query;
 	}
 
+	// for update color page
 	function get_where_custom($col, $value) 
 	{
 		$table = $this->get_table();
 		$this->db->where($col, $value);
+		$this->db->order_by('color');
 		$query=$this->db->get($table);
 		return $query;
 	}
