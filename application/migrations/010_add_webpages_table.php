@@ -24,7 +24,7 @@ class Migration_Add_webpages_table extends CI_Migration
               'page_description' => array(
                  'type' => 'TEXT',
               ),
-              'headline' => array(
+              'page_headline' => array(
                  'type' => 'VARCHAR',
                  'constraint' => '255',
               ),

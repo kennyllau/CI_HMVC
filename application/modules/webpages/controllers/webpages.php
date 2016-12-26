@@ -6,6 +6,113 @@ class Webpages extends MX_Controller
 		parent::__construct();
 
 	}
+
+	function create()
+	{
+		$this->load->library('session');
+		$this->load->module('site_security');
+		$this->site_security->_make_sure_is_admin();
+
+		$update_id = $this->uri->segment(3);
+		$submit = $this->input->post('submit', true);
+
+		if ($submit == "Submit")
+		{
+			$this->load->library('form_validation');
+			$this->form_validation->set_rules('page_title', 'Page Title', 'required|max_length[250]');
+			$this->form_validation->set_rules('page_headline', 'Page Headline', 'required|max_length[250]');
+			$this->form_validation->set_rules('page_content', 'Page Content', 'required');
+
+			if ($this->form_validation->run() == TRUE)
+			{
+				// get the variables
+				$data = $this->fetch_data_from_post();
+				$data['page_url'] = url_title($data['page_title']);
+
+				if (is_numeric($update_id))
+				{
+					// update the details
+					$this->_update($update_id, $data);
+					$flash_msg = "The web page details were successfully updated.";
+					$value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
+					$this->session->set_flashdata('item', $value);
+					redirect('webpages/create/'.$update_id);
+				} else {
+					// insert new page
+					$this->_insert($data);
+					$update_id = $this->get_max(); // get ID of new page
+					$flash_msg = "The web page was successfully added";
+					$value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
+					$this->session->set_flashdata('item', $value);
+					redirect('webpages/create/'.$update_id);
+				}
+			}
+		} elseif ($submit == "Cancel") {
+			redirect('webpages/manage');
+		}
+
+		if (!is_numeric($update_id))
+		{
+			$data['page_headline'] = "Create New Page";
+		} else {
+			$data['page_headline'] = "Update Page Details";
+		}
+		
+		if ((is_numeric($update_id)) && ($submit != "Submit"))
+		{
+			$data = $this->fetch_data_from_db($update_id);
+		} else {
+			$data = $this->fetch_data_from_post();
+		}
+
+
+		$data['update_id'] = $update_id;
+		$data['flash'] = $this->session->flashdata('item');
+
+		$data['view_file'] = "create";
+		$this->load->module('templates');
+		// load heirarchy module and pass $data to it
+		$this->templates->admin($data);
+	}
+
+	function fetch_data_from_post()
+	{
+		$data['page_title'] = $this->input->post('page_title', true);
+		$data['page_keywords'] = $this->input->post('page_keywords', true);
+		$data['page_description'] = $this->input->post('page_description', true);
+		$data['page_headline'] = $this->input->post('page_headline', true);
+		$data['page_content'] = $this->input->post('page_content', true);
+
+		return $data;
+	}
+
+	function fetch_data_from_db($update_id)
+	{
+
+		if (!is_numeric($update_id))
+		{
+			redirect('site_security/not_allowed');
+		}
+
+		$query= $this->get_where($update_id);
+		foreach($query->result() as $row )
+		{
+			$data['page_title'] = $row->page_title;
+			$data['page_url'] = $row->page_url;
+			$data['page_keywords'] = $row->page_keywords;
+			$data['page_headline'] = $row->page_headline;
+			$data['page_description'] = $row->page_description;
+			$data['page_content'] = $row->page_content;
+		}
+
+		if(!isset($data))
+		{
+			$data = "";
+		}
+
+		return $data;
+	}
+
 	function manage ()
 	{
 		$this->load->module('site_security');

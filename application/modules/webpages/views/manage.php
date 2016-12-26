@@ -25,9 +25,9 @@
 			<table class="table table-striped table-bordered bootstrap-datatable datatable">
 			  <thead>
 				  <tr>
-					  <th>Item Title</th>
-					  <th>Price</th>
-					  <th>Was Price</th>
+					  <th>Page Url</th>
+					  <th>Page Title</th>
+					  <th>Headline</th>
 					  <th>Status</th>
 					  <th>Actions</th>
 				  </tr>
