@@ -46,6 +46,11 @@ class Webpages extends MX_Controller
 		{
 			redirect('site_security/not_allowed');
 		}
+		elseif ($update_id < 3) 
+		{
+			// prevent deleting home and contact page
+			redirect('site_security/not_allowed');
+		}
 
 		$this->load->library('session');
 		$this->load->module('site_security');
@@ -86,8 +91,13 @@ class Webpages extends MX_Controller
 				$data['page_url'] = url_title($data['page_title']);
 
 				if (is_numeric($update_id))
-				{
-					// update the details
+				{  // update the details
+
+					if ($update_id < 3)
+					{
+						unset($data['page_url']);
+					}
+
 					$this->_update($update_id, $data);
 					$flash_msg = "The web page details were successfully updated.";
 					$value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';

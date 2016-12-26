@@ -92,7 +92,10 @@
 			<div class="box-content">
 
 				<a href="<?= base_url().$page_url ?>"><button type="button" class="btn btn-default">View Page</button></a>
+				<?php
+					if ($update_id > 2) { ?>
 				<a href="<?= base_url() ?>webpages/deleteconf/<?= $update_id ?>"><button type="button" class="btn btn-danger">Delete Page</button></a>
+				<?php } ?>
 
 			</div>
 		</div><!--/span-->

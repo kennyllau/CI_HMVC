@@ -59,14 +59,17 @@
     </nav>
     <div class="container" style="min-height: 650px;">
 <?php
-  if (isset($view_file))
+  if (isset($page_content))
   {
+    echo nl2br($page_content);
+  }
+  elseif(isset($view_file))
+  { 
     $this->load->view($view_module.'/'.$view_file);
   }
 ?>
-
-      <hr>
       </div>
+      <hr>
       <div class="container">
       <footer>
         <p>&copy; 2016 Company, Inc.</p>

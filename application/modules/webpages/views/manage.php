@@ -39,7 +39,7 @@
 		$view_page_url = base_url()."webpages/view/".$row->page_url;
 ?>
 				<tr>
-					<td><?= $view_page_url ?></td>
+					<td><?= base_url().$row->page_url ?></td>
 					<td class="center"><?= $row->page_title ?></td>
 
 					<td class="center">
