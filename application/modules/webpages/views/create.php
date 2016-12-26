@@ -7,8 +7,7 @@
  }
 
 </style>
-
-<h1><?= $page_headline ?></h1>
+<h1><?= $headline ?></h1>
 <?php 
 	$manage_item_url = base_url()."webpages/manage";
 ?>
@@ -62,13 +61,6 @@
 						</div>
 					</div>
 
-					<div class="control-group">
-						<label class="control-label" for="typeahead">Page Headline </label>
-					    <div class="controls">
-							<input type="text" class="span6" name="page_headline" value="<?= $page_headline ?>">
-					  	</div>
-					</div>
-
 					<div class="control-group hidden-phone">
 						<label class="control-label" for="textarea2">Page Content</label>
 						<div class="controls">
@@ -85,3 +77,26 @@
 		</div>
 	</div><!--/span-->
 </div> <!-- /row -->
+<?php
+	if (is_numeric($update_id)) { ?> 
+	<!-- if there is an update id, this div buttons will appear -->
+	<div class="row-fluid sortable">
+		<div class="box span12">
+			<div class="box-header" data-original-title>
+				<h2><i class="halflings-icon white edit"></i><span class="break"></span>Additional Options</h2>
+				<div class="box-icon">
+					<a href="#" class="btn-minimize"><i class="halflings-icon white chevron-up"></i></a>
+					<a href="#" class="btn-close"><i class="halflings-icon white remove"></i></a>
+				</div>
+			</div>
+			<div class="box-content">
+
+				<a href="<?= base_url().$page_url ?>"><button type="button" class="btn btn-default">View Page</button></a>
+				<a href="<?= base_url() ?>webpages/deleteconf/<?= $update_id ?>"><button type="button" class="btn btn-danger">Delete Page</button></a>
+
+			</div>
+		</div><!--/span-->
+	</div><!--/row-->
+	<?php
+	}
+?>

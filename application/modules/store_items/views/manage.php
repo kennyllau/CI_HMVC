@@ -38,6 +38,8 @@
 	{ 
 		$edit_item_url = base_url()."store_items/create/".$row->id;
 		// edit_item_url is link to update item button in inventory
+		$view_page_url = base_url()."store_items/view/".$row->id;
+
 
 		$status = $row->status;
 
@@ -58,7 +60,7 @@
 						<span class="label label-<?= $status_label?>"><?= $status_description ?></span>
 					</td>
 					<td class="center">
-						<a class="btn btn-success" href="#">
+						<a class="btn btn-success" href="<?= $view_page_url ?>">
 							<i class="halflings-icon white zoom-in"></i>  
 						</a>
 						<a class="btn btn-info" href="<?= $edit_item_url ?>">
