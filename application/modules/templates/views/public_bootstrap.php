@@ -39,7 +39,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Home</a>
+          <a class="navbar-brand" href="<?= base_url() ?>">Home</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
 
@@ -61,7 +61,17 @@
 <?php
   if (isset($page_content))
   {
-    echo nl2br($page_content);
+    // echo nl2br($page_content);
+
+    if ($page_url=="")
+    {
+      require_once('content_homepage.php');
+    }
+    elseif ($page_url=="contactus")
+    {
+      //load up a contact form
+      echo Modules::run('contactus/_draw_form');
+    }
   }
   elseif(isset($view_file))
   { 

@@ -29,10 +29,15 @@ class Default_module extends MX_Controller
 				$data['page_content'] = $row->page_content;
 				$data['page_description'] = $row->page_description;
 			}
-
-			$this->load->module('templates');
-			$this->templates->public_bootstrap($data);
 		}
+		else // not found page
+		{
+			$this->load->module('site_settings');
+			$data['page_content'] = $this->site_settings->_get_page_not_found_msg();
+		}
+
+		$this->load->module('templates');
+		$this->templates->public_bootstrap($data);
 	}
 
 }
